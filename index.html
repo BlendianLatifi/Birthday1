@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎉</title>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-50vh) scale(1.2);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out;
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function BirthdayGift() {
+            const [currentReason, setCurrentReason] = useState(0);
+            const [revealed, setRevealed] = useState(false);
+            const [hearts, setHearts] = useState([]);
+
+            const reasons = [
+                "Your smile lights up every room you walk into",
+                "You have the most gorgeous laugh I've ever seen",
+                "You see beauty in places others overlook",
+                "You made my life infinitely better just by being in it",
+                "Your presence brings peace to my chaos",
+                "You have a heart of pure gold",
+                "Every conversation with you is a gift",
+            ];
+
+            useEffect(() => {
+                if (revealed) {
+                    const interval = setInterval(() => {
+                        const id = Date.now() + Math.random();
+                        const left = Math.random() * 100;
+                        setHearts(prev => [...prev, { id: id, left: left }]);
+                        
+                        setTimeout(() => {
+                            setHearts(prev => prev.filter(h => h.id !== id));
+                        }, 3000);
+                    }, 500);
+                    
+                    return () => clearInterval(interval);
+                }
+            }, [revealed]);
+
+            const nextReason = () => {
+                if (currentReason < reasons.length - 1) {
+                    setCurrentReason(currentReason + 1);
+                }
+            };
+
+            const prevReason = () => {
+                if (currentReason > 0) {
+                    setCurrentReason(currentReason - 1);
+                }
+            };
+
+            if (!revealed) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-500 flex items-center justify-center p-4">
+                        <div className="text-center">
+                            <div className="mb-8 animate-bounce">
+                                <svg className="w-32 h-32 mx-auto text-white drop-shadow-2xl" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                                    <rect x="2" y="7" width="20" height="5"></rect>
+                                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                                </svg>
+                            </div>
+                            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg">
+                                Happy Birthday! 🎉
+                            </h1>
+                            <p className="text-xl md:text-2xl text-white mb-12 drop-shadow-md">
+                                I made something special for you...
+                            </p>
+                            <button
+                                onClick={() => setRevealed(true)}
+                                className="bg-white text-purple-600 px-12 py-4 rounded-full text-xl font-semibold hover:scale-110 transform transition-all duration-300 shadow-2xl hover:shadow-pink-300"
+                            >
+                                Open Your Gift 💝
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-rose-400 via-fuchsia-400 to-purple-500 relative overflow-hidden">
+                    {hearts.map(heart => (
+                        <div
+                            key={heart.id}
+                            className="absolute bottom-0 animate-float pointer-events-none"
+                            style={{left: heart.left + '%', animationDuration: '3s'}}
+                        >
+                            <svg className="w-8 h-8 text-white opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                    ))}
+
+                    <div className="absolute top-10 left-10 animate-pulse">
+                        <svg className="w-12 h-12 text-yellow-200" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M12 3v18M3 12h18M7.05 7.05l9.9 9.9M7.05 16.95l9.9-9.9"></path>
+                        </svg>
+                    </div>
+                    <div className="absolute top-20 right-20 animate-pulse delay-100">
+                        <svg className="w-10 h-10 text-yellow-200" fill="currentColor" viewBox="0 0 24 24">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div className="absolute bottom-20 left-20 animate-pulse delay-200">
+                        <svg className="w-8 h-8 text-yellow-200" fill="currentColor" viewBox="0 0 24 24">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+
+                    <div className="min-h-screen flex items-center justify-center p-4">
+                        <div className="max-w-3xl w-full">
+                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 transform hover:scale-105 transition-transform duration-300">
+                                <div className="text-center mb-8">
+                                    <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
+                                        10 Reasons Why You're Amazing
+                                    </h2>
+                                    <div className="flex justify-center gap-2 mb-6">
+                                        {reasons.map((_, idx) => {
+                                            const isActive = idx === currentReason;
+                                            const classes = isActive 
+                                                ? 'h-2 rounded-full transition-all duration-300 w-8 bg-gradient-to-r from-pink-500 to-purple-600' 
+                                                : 'h-2 rounded-full transition-all duration-300 w-2 bg-gray-300';
+                                            return <div key={idx} className={classes} />;
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className="min-h-40 flex items-center justify-center mb-8">
+                                    <p className="text-2xl md:text-3xl text-gray-700 text-center font-medium leading-relaxed animate-fadeIn">
+                                        "{reasons[currentReason]}"
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <button
+                                        onClick={prevReason}
+                                        disabled={currentReason === 0}
+                                        className={currentReason === 0
+                                            ? 'px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            : 'px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:shadow-lg hover:scale-105'
+                                        }
+                                    >
+                                        ← Previous
+                                    </button>
+
+                                    <div className="text-center">
+                                        <span className="text-lg font-semibold text-gray-600">
+                                            {currentReason + 1} of {reasons.length}
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        onClick={nextReason}
+                                        disabled={currentReason === reasons.length - 1}
+                                        className={currentReason === reasons.length - 1
+                                            ? 'px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-gray-200 text-gray-400 cursor-not-allowed'
+                                            : 'px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:shadow-lg hover:scale-105'
+                                        }
+                                    >
+                                        Next →
+                                    </button>
+                                </div>
+
+                                {currentReason === reasons.length - 1 && (
+                                    <div className="mt-8 text-center animate-fadeIn">
+                                        <div className="bg-gradient-to-r from-pink-100 to-purple-100 rounded-2xl p-6">
+                                            <p className="text-xl text-gray-700 mb-4">
+                                                Happy Birthday! 🎂✨
+                                            </p>
+                                            <p className="text-lg text-gray-600">
+                                                Hope your day is as wonderful as you are! 💖
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<BirthdayGift />);
+    </script>
+</body>
+</html>
